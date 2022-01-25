@@ -4,8 +4,6 @@ package main
 import (
 	"fmt"
 	"net"
-	"net/netip"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -25,44 +23,73 @@ func main() {
 		"158.24.28.232:26257",
 	}
 
-	var (
-		addr, port string
-		found      bool
-		addrPorts  []netip.AddrPort
-		tmpAddr    netip.Addr
-		tmpPort    uint16
-	)
+	// Ye old way.
+	var addr, port string
+	var addrPorts []string
 
 	for _, ip := range ipList {
-		addr, port, found = strings.Cut(ip, ":")
-		switch found {
-		case false:
-			// If the separator isn't found, presume port 80.
-			tmpAddr, _ = netip.ParseAddr(addr)
-			tmpPort = uint16(80)
-			addrPorts = append(addrPorts, netip.AddrPortFrom(tmpAddr, tmpPort))
-		case true:
-			tmpAddr, _ = netip.ParseAddr(addr)
-			parsedPort, err := strconv.ParseUint(port, 10, 16)
-			if err != nil {
-				fmt.Println(err)
-			}
-			tmpPort = uint16(parsedPort)
-			addrPorts = append(addrPorts, netip.AddrPortFrom(tmpAddr, tmpPort))
+		loc := strings.IndexByte(ip, ':')
+		if loc == -1 {
+			addr = ip
+			addrPorts = append(addrPorts, addr+":80")
+		} else {
+			addr, port = ip[:loc], ip[loc+1:]
+			addrPorts = append(addrPorts, addr+":"+port)
 		}
 	}
+
 	for _, addrPort := range addrPorts {
 		fmt.Printf("Type: %T; Data: %v\n", addrPort, addrPort)
-		rs, err := net.DialTimeout("tcp", addrPort.String(), time.Millisecond*50)
+		rs, err := net.DialTimeout("tcp", addrPort, time.Millisecond*50)
 
 		if err != nil {
 			fmt.Println("\terror: ", err)
 			continue
 		}
-		fmt.Printf("\tSuccessfully connected to %s\n", addrPort.String())
+		fmt.Printf("\tSuccessfully connected to %s\n", addrPort)
 		err = rs.Close()
 	}
 
+	// Strings.Cut
+	//var (
+	//	addr, port string
+	//	found      bool
+	//	addrPorts  []netip.AddrPort
+	//	tmpAddr    netip.Addr
+	//	tmpPort    uint16
+	//)
+	//
+	//for _, ip := range ipList {
+	//	addr, port, found = strings.Cut(ip, ":")
+	//	switch found {
+	//	case false:
+	//		// If the separator isn't found, presume port 80.
+	//		tmpAddr, _ = netip.ParseAddr(addr)
+	//		tmpPort = uint16(80)
+	//		addrPorts = append(addrPorts, netip.AddrPortFrom(tmpAddr, tmpPort))
+	//	case true:
+	//		tmpAddr, _ = netip.ParseAddr(addr)
+	//		parsedPort, err := strconv.ParseUint(port, 10, 16)
+	//		if err != nil {
+	//			fmt.Println(err)
+	//		}
+	//		tmpPort = uint16(parsedPort)
+	//		addrPorts = append(addrPorts, netip.AddrPortFrom(tmpAddr, tmpPort))
+	//	}
+	//}
+	//for _, addrPort := range addrPorts {
+	//	fmt.Printf("Type: %T; Data: %v\n", addrPort, addrPort)
+	//	rs, err := net.DialTimeout("tcp", addrPort.String(), time.Millisecond*50)
+	//
+	//	if err != nil {
+	//		fmt.Println("\terror: ", err)
+	//		continue
+	//	}
+	//	fmt.Printf("\tSuccessfully connected to %s\n", addrPort.String())
+	//	err = rs.Close()
+	//}
+
+	// Application
 	//var addrPorts []netip.AddrPort
 	//
 	//for _, ip := range ipList {
