@@ -32,10 +32,9 @@ func run() error {
 func processIPAddresses(ipList []string, print bool) {
 	var (
 		ipAddresses []net.IP
-		tip         net.IP
 	)
 	for _, ip := range ipList {
-		tip = net.ParseIP(ip)
+		tip := net.ParseIP(ip)
 		ipAddresses = append(ipAddresses, tip)
 	}
 

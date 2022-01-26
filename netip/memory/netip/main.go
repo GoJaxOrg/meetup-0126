@@ -26,10 +26,9 @@ func run() error {
 func processIPAddresses(ipList []string, print bool) {
 	var (
 		ipAddresses []netip.Addr
-		tip         netip.Addr
 	)
 	for _, ip := range ipList {
-		tip, _ = netip.ParseAddr(ip)
+		tip, _ := netip.ParseAddr(ip)
 		ipAddresses = append(ipAddresses, tip)
 	}
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 	"runtime/pprof"
 	"testing"
@@ -54,17 +55,23 @@ func BenchmarkProcessAllIPAddresses(b *testing.B) {
 
 func TestProfileProcess10KAddresses(t *testing.T) {
 	t.Log("TestProfileProcess10KAddresses")
-	outFile, err := os.Create("profile.mem")
-	if err != nil {
-		t.Fatalf("error creating profile destination: %s\n", err)
-	}
-	defer outFile.Close()
 
 	ipList := loadIPList("10k-list.txt")
 	processIPAddresses(ipList, true)
 
+	writeHeapProfile()
+}
+
+func writeHeapProfile() {
+	outFile, err := os.Create("profile.mem")
+	if err != nil {
+		log.Fatalf("error creating profile destination: %s\n", err)
+	}
+
 	err = pprof.WriteHeapProfile(outFile)
 	if err != nil {
-		t.Fatalf("error writing heap output: %s\n", err)
+		log.Fatalf("error writing heap output: %s\n", err)
 	}
+
+	err = outFile.Close()
 }
