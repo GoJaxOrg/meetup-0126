@@ -22,7 +22,6 @@ func main() {
 }
 
 func printBuildinfo() {
-	//build, _ := debug.ReadBuildInfo()
 	bin, err := os.Executable()
 	if err != nil {
 		log.Fatalln("Wasn't quite able to find that binary, bruh.")
