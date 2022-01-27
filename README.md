@@ -5,3 +5,8 @@ on the Go community throughout the state of Florida.
 Since the release of Go 1.18 is gear, we wanted to take the opportunity to discuss some of the things that haven't
 received a lot of airplay, so to speak. Everyone talks about generics, so we'll talk about what else is coming. Besides,
 we did generics last year. ;-)
+
+> Tip: If you get errors running the code, add the `-workfile=off` flag. This repo is not setup to use workspaces but sometimes it appears to think it does.
+
+`go1.18beta1 run main.go -workfile=off`
+ 
