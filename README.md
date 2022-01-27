@@ -9,4 +9,11 @@ we did generics last year. ;-)
 > Tip: If you get errors running the code, add the `-workfile=off` flag. This repo is not setup to use workspaces but sometimes it appears to think it does.
 
 `go1.18beta1 run main.go -workfile=off`
+
+- [Go 1.18 Overview](https://go.dev/blog/go1.18beta1)
+- [Go 1.18 Release Notes](https://tip.golang.org/doc/go1.18)
+- [netip Docs](https://pkg.go.dev/net/netip)
+- [debug/buildinfo Docs](https://pkg.go.dev/debug/buildinfo)
+- [strings Docs](https://pkg.go.dev/strings@go1.18beta1)
+
  
